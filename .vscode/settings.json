@@ -1,0 +1,17 @@
+{
+  "files.associations": {
+    "kubernetes/**/*.sops.toml": "plaintext"
+  },
+  "prettier.configPath": ".prettierrc.yaml",
+  "prettier.ignorePath": ".prettierignore",
+  "yaml.schemas": {
+    "kubernetes": [
+      "kubernetes/*.yml",
+      "kubernetes/*.yaml"
+    ],
+    "https://json.schemastore.org/yamllint.json": "file:///home/negative7/tivoli/.yamllint.yaml"
+  },
+  "markdownlint.config": {
+    "extends": ".markdownlint.yaml"
+  }
+}
