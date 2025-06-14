@@ -43,5 +43,3 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-    - name: onepassword-connect
-      namespace: external-secrets
