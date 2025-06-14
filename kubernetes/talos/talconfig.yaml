@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 clusterName: &clusterName tivoli
 
-endpoint: https://k8s.homelab.internal:6443
+endpoint: https://k8s.tivoli.internal:6443
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.4
@@ -10,8 +10,8 @@ talosVersion: v1.10.4
 kubernetesVersion: v1.33.1
 
 additionalApiServerCertSans: &sans
-  - k8s.homelab.internal
-  - &talosControlplaneVip 192.168.10.30
+  - k8s.tivoli.internal
+  - &talosControlplaneVip 192.168.10.10
   - 127.0.0.1 # KubePrism
 additionalMachineCertSans: *sans
 
@@ -19,15 +19,15 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: talos.homelab.internal
-    ipAddress: 192.168.10.31
+  - hostname: talos.tivoli.internal
+    ipAddress: 192.168.10.5
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector:
       model: "KBG40ZNS512G*"
     networkInterfaces:
-      - interface: eno1
+      - interface: enp2s0
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -86,9 +86,9 @@ controlPlane:
       machine:
         kubelet:
           extraMounts:
-            - destination: /var/mnt/extra
+            - destination: /var/local/openebs
               type: bind
-              source: /var/mnt/extra
+              source: /var/local/openebs
               options:
                 - rbind
                 - rshared
@@ -161,7 +161,7 @@ controlPlane:
       machine:
         network:
           extraHostEntries:
-            - ip: 192.168.10.30
+            - ip: 192.168.10.10
               aliases:
                 - k8s.homelab.internal
 

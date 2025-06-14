@@ -17,7 +17,7 @@ tasks:
         vars:
           INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
-      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "home-ops" "${KUBECONFIG}"
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "tivoli" "${KUBECONFIG}"
 
   apps:
     desc: Bootstrap Apps
@@ -34,6 +34,6 @@ tasks:
       NODE_COUNT:
         sh: talosctl config info --output json | jq --raw-output '.nodes | length'
     cmds:
-      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
-      - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
+      # - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
+      # - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
       - helmfile --quiet --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff

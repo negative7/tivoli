@@ -5,9 +5,9 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./prometheusrule.yaml
+  - ./prometheusRule.yaml
 configMapGenerator:
-  - name: flux-instance-helm-values
+  - name: cert-manager-helm-values
     files:
       - values.yaml=./values.yaml
 configurations:

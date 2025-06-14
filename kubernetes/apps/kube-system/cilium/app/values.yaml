@@ -9,7 +9,7 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
-bpfClockProbe: true
+  tproxy: true
 cgroup:
   autoMount:
     enabled: false
@@ -23,21 +23,12 @@ dashboards:
   enabled: true
   annotations:
     grafana_folder: Cilium
-devices: eno1,eth0
-enableIPv4BIGTCP: true
+devices: enp2s0
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 envoy:
-  enabled: true
-  rollOutPods: true
-  prometheus:
-    serviceMonitor:
-      enabled: true
-gatewayAPI:
-  enabled: true
-  enableAlpn: true
-  xffNumTrustedHops: 1
+  enabled: false
 hubble:
   enabled: false
 ipam:
