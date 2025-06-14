@@ -6,7 +6,7 @@ metadata:
   namespace: monitoring
 spec:
   hostnames:
-    - dashboard.negative7.com
+    - dashboard.tivoli.negative7.com
   parentRefs:
     - name: internal
       namespace: kube-system
