@@ -17,35 +17,35 @@ releases:
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
     version: 20.0.1
 
-  - name: cilium
-    namespace: kube-system
-    atomic: true
-    chart: cilium/cilium
-    version: 1.17.4
-    values:
-      - '/home/negative7/tivoli/kubernetes/apps/kube-system/cilium/app/values.yaml'
-    needs:
-      - monitoring/prometheus-operator-crds
-    hooks:
-      - # Wait for cilium CRDs to be available
-        events:
-          - postsync
-        command: bash
-        args:
-          - -c
-          - until kubectl get crd ciliumbgppeeringpolicies.cilium.io ciliuml2announcementpolicies.cilium.io ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 10; done
-        showlogs: true
-      - # Apply cilium network configuration
-        events:
-          - postsync
-        command: kubectl
-        args:
-          - apply
-          - --namespace=kube-system
-          - --server-side
-          - --field-manager=kustomize-controller
-          - --kustomize=/home/negative7/tivoli/kubernetes/apps/kube-system/cilium/config/
-        showlogs: true
+  # - name: cilium
+  #   namespace: kube-system
+  #   atomic: true
+  #   chart: cilium/cilium
+  #   version: 1.17.4
+  #   values:
+  #     - '/home/negative7/tivoli/kubernetes/apps/kube-system/cilium/app/values.yaml'
+  #   needs:
+  #     - monitoring/prometheus-operator-crds
+  #   hooks:
+  #     - # Wait for cilium CRDs to be available
+  #       events:
+  #         - postsync
+  #       command: bash
+  #       args:
+  #         - -c
+  #         - until kubectl get crd ciliumbgppeeringpolicies.cilium.io ciliuml2announcementpolicies.cilium.io ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 10; done
+  #       showlogs: true
+  #     - # Apply cilium network configuration
+  #       events:
+  #         - postsync
+  #       command: kubectl
+  #       args:
+  #         - apply
+  #         - --namespace=kube-system
+  #         - --server-side
+  #         - --field-manager=kustomize-controller
+  #         - --kustomize=/home/negative7/tivoli/kubernetes/apps/kube-system/cilium/config/
+  #       showlogs: true
 
   - name: coredns
     namespace: kube-system
@@ -54,8 +54,8 @@ releases:
     version: 1.42.3
     values:
       - '/home/negative7/tivoli/kubernetes/apps/kube-system/coredns/app/values.yaml'
-    needs:
-      - kube-system/cilium
+    # needs:
+    #   - kube-system/cilium
 
   - name: cert-manager
     namespace: cert-manager
@@ -71,7 +71,7 @@ releases:
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.17.0
-    values: ['/home/negative7/tivoli/kubernetes/apps/external-secrets/external-secrets/app/helm/values.yaml']
+    values: ['/home/negative7/tivoli/kubernetes/apps/external-secrets/external-secrets/app/values.yaml']
     hooks:
       - # Apply cluster secret store
         events: ['postsync']
@@ -82,7 +82,7 @@ releases:
           - --server-side
           - --field-manager=kustomize-controller
           - --filename
-          - /home/negative7/tivoli/kubernetes/apps/external-secrets/external-secrets/app/clustersecretstore.yaml
+          - /home/negative7/tivoli/kubernetes/apps/external-secrets/external-secrets/stores/onepassword/clustersecretstore.yaml
           - --wait=true
         showlogs: true
     needs: ['cert-manager/cert-manager']
